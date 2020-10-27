@@ -4,8 +4,10 @@
 --     ENCODING = 'UTF8'
 --     CONNECTION LIMIT = -1;
 
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE users (
-    user_id SERIAL NOT NULL PRIMARY KEY,
+    user_id uuid DEFAULT uuid_generate_v4 (),
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     token VARCHAR(255),

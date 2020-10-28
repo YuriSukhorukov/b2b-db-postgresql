@@ -7,15 +7,15 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE users (
-    user_id uuid DEFAULT uuid_generate_v4 (),
+    user_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4 (),
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     token VARCHAR(255),
     created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE companies (
-    id SERIAL NOT NULL PRIMARY KEY,
-    user_id SERIAL NOT NULL UNIQUE,
+    company_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4 (),
+    user_id uuid NOT NULL UNIQUE,
     legal_type VARCHAR(8) NOT NULL,
     company_name VARCHAR(128) NOT NULL,
     tax_id NUMERIC(19,0) UNIQUE,
@@ -23,8 +23,8 @@ CREATE TABLE companies (
     updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE offers (
-    id SERIAL NOT NULL PRIMARY KEY,
-    user_id SERIAL NOT NULL,
+    offer_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4 (),
+    user_id uuid NOT NULL,
     title VARCHAR(255) NOT NULL,
     description VARCHAR(255) NOT NULL,
     price NUMERIC(19,6) NOT NULL,
@@ -39,12 +39,12 @@ CREATE TABLE offers (
     created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE proposals (
-    id SERIAL NOT NULL PRIMARY KEY,
-    user_id SERIAL NOT NULL,
-    offer_id SERIAL NOT NULL,
+    proposal_id uuid DEFAULT uuid_generate_v4 (),
+    user_id uuid NOT NULL,
+    offer_id uuid NOT NULL,
     created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (user_id, offer_id),
     FOREIGN KEY (offer_id) 
-        REFERENCES offers (id)
+        REFERENCES offers (offer_id)
         ON DELETE CASCADE
 );
